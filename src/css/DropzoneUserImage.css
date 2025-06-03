@@ -1,0 +1,97 @@
+.dropzone-container {
+    max-width: 512px; /* Equivalent to Chakra's maxW="xl" */
+    margin: 0 auto;
+  }
+  
+  .dropzone {
+    border: 2px dashed #d1d5db;
+    padding: 16px;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    background-color: #ffffff;
+    transition: background-color 0.2s ease;
+  }
+  
+  .dropzone:hover,
+  .dropzone-active {
+    background-color: #f9fafb;
+  }
+  
+  .upload-icon {
+    width: 24px;
+    height: 24px;
+    color: #6b7280;
+    margin: 0 auto 8px;
+  }
+  
+  .dropzone-text {
+    font-weight: 500;
+    color: #374151;
+    margin: 0;
+  }
+  
+  .dropzone-subtext {
+    font-size: 14px;
+    color: #6b7280;
+    margin: 4px 0 0;
+  }
+  
+  .file-list {
+    margin-top: 8px;
+  }
+  
+  .file-list-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: #fff;
+    margin: 16px 0 16px 0;
+  }
+  
+  .file-list-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+  }
+  
+  .file-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 0;
+    margin-bottom: 18px;
+
+  }
+  
+  .file-info {
+    display: flex;
+    align-items: center;
+  }
+  
+  .file-preview {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-right: 8px;
+  }
+  
+  .file-details {
+    font-size: 12px;
+    color: #6b7280;
+    margin: 0;
+  }
+  
+  .remove-button {
+    font-size: 14px;
+    color: #ef4444;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+  
+  .remove-button:hover {
+    color: #b91c1c;
+  }
