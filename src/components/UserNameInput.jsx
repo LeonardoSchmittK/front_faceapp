@@ -5,14 +5,14 @@ function UserNameInput({ onNameChange, currentStudentName }) {
   return (
     <Box textAlign="left" width={"full"}> 
       <Text mb="8px">
-        Nome do aluno
+        Nome do aluno:
       </Text>
       <Input
         onChange={(e) => {
           const inputValue = e.target.value || ''; 
-          onNameChange(inputValue.trim());
+          onNameChange(inputValue);
         }}
-        placeholder="Nome do aluno"
+        placeholder="Ada Lovelace"
         size="sm"
         borderRadius={4}
         padding={4}

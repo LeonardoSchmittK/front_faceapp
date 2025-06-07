@@ -8,36 +8,11 @@ const useStore = create(
     isUserLogged: false,
     teacherLoggedIn:{},
     activeId: false,
-    classes: [
-      {
-        title: "Aula Unisul I",
-        students: [
-          { name: "Leo", photoUrl: "https://example.com/leo.jpg" },
-          { name: "Ana", photoUrl: "https://example.com/ana.jpg" },
-        ],
-      },
-      {
-        title: "Aula Unisul II",
-        students: [
-          { name: "Leo", photoUrl: "https://example.com/leo.jpg" },
-          { name: "Maria", photoUrl: "https://example.com/maria.jpg" },
-        ],
-      },
-      {
-        title: "Aula Unisul III",
-        students: [
-          { name: "Leo", photoUrl: "https://example.com/leo.jpg" },
-          { name: "João", photoUrl: "https://example.com/joao.jpg" },
-        ],
-      },
-      {
-        title: "Aula Unisul IV",
-        students: [
-          { name: "Leo", photoUrl: "https://example.com/leo.jpg" },
-          { name: "Clara", photoUrl: "https://example.com/clara.jpg" },
-        ],
-      },
-    ],
+    previewUserImage:false,
+    setPreviewUserImage:(flag)=>set(()=>({
+      previewUserImage:flag
+    })),
+
    login: (teacherData) =>
   set(
     () => ({

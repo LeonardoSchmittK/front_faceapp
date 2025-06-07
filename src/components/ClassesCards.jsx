@@ -1,6 +1,7 @@
 import { Flex, Heading, useColorModeValue } from '@chakra-ui/react';
 import { useState } from 'react';
 import useStore from '../store/store.js';
+import useClassrooms from "../hooks/useClassrooms.js"
 
 function ClassesCards() {
   const activeId = useStore((state) => state.activeId);
@@ -10,13 +11,8 @@ function ClassesCards() {
   const inactiveBg = useColorModeValue('gray.100', 'gray.700');
   const textColor = useColorModeValue('gray.800', 'white');
   const inactiveTextColor = useColorModeValue('gray', 'white');
-  
-  const classes = [
-    { title: "Aula Unisul I" },
-    { title: "Aula Unisul II" },
-    { title: "Aula Unisul III" },
-    { title: "Aula Unisul IV" }
-  ];
+
+const {  classes} = useClassrooms();
 
   const handleClick = (id) => {
     setActiveId(activeId === id ? null : id); // Toggle selection
@@ -24,6 +20,11 @@ function ClassesCards() {
 
   return (
     <Flex gap="4" mt={8} w={300} maxW={500} direction="column">
+      {classes.length == 0 &&  <p 
+       
+        >
+          Não há turmas criadas. Crie uma e ela aparecerá aqui :{')'}
+        </p>}
       {classes.map((classItem, id) => (
         <Heading 
           key={id}
@@ -40,7 +41,7 @@ function ClassesCards() {
        
           onClick={() => handleClick(id)}
         >
-          {classItem.title}  
+          {classItem.name}  
         </Heading>
       ))}
     </Flex>

@@ -24,11 +24,16 @@ import {
     Flex,
     Image,
   } from '@chakra-ui/react';
-  import React, { useState } from 'react';
+  import React, { useEffect, useState } from 'react';
   import DropzoneUserImage from './DropzoneUserImage';
   import UserNameInput from './UserNameInput';
   import ClassNameInput from './ClassNameInput';
-  
+  import { X as RemoveIcon } from 'lucide-react';
+  import useStore from "../store/store.js"
+  import axios from "axios";
+  import useClassroomStore from "../store/classStore.js"
+  import useCustomToast from '../hooks/useCustomToast'; 
+
   const steps = [
     { title: 'Nome da Turma' },
     { title: 'Adicionar Aluno' },
@@ -36,6 +41,12 @@ import {
   ];
   
   function CreateClassModal({ isOpen, onClose }) {
+    const setPreviewImage = useStore((state) => state.setPreviewUserImage);
+    const teacherLoggedIn = useStore((state) => state.teacherLoggedIn);
+    const fetchClasses = useClassroomStore((state) => state.fetchClasses)
+
+    const showToast = useCustomToast();
+    
     const [students, setStudents] = useState([]);
     const [currentStudentName, setCurrentStudentName] = useState('');
     const [currentClassImage, setCurrentClassImage] = useState(null);
@@ -44,6 +55,7 @@ import {
       index: 0,
       count: steps.length,
     });
+
   
     const handleNext = () => {
       setActiveStep((prev) => (prev < steps.length - 1 ? prev + 1 : prev));
@@ -74,15 +86,53 @@ import {
                     image: URL.createObjectURL(currentClassImage) ,
                 };
                 
-                setStudents([...students, newStudent]);
+                setStudents([newStudent,...students]);
                 setCurrentStudentName('');
                 setCurrentClassImage(null);
+                setPreviewImage(false)
             }
         }catch{
 
         }
     };
-  
+
+
+    function handleRemoveStudent(indexToRemove) {
+      const newStudents = students.filter((_, index) => index !== indexToRemove);
+      setStudents(newStudents);
+    }
+
+    async function handleCreateClass() {
+     
+      const classJson = {
+        teacher: teacherLoggedIn.id, 
+        name: className,
+        students: students, 
+      };
+
+      try {
+        const response = await axios.post("http://localhost:3001/api/v1/Classrooms", classJson);
+
+        fetchClasses(teacherLoggedIn.id)
+
+        showToast({
+          title: 'Turma criada com sucesso!',
+          description: '',
+          status: 'success',
+        });
+        console.log("Classroom created:", response.data);
+        onClose()
+        
+      } catch (error) {
+        console.error("Erro ao criar turma:", error.response?.data || error.message);
+        showToast({
+          title: 'Erro ao criar turma',
+          description: 'Por favor tente mais tarde',
+          status: 'error',
+        });
+      }
+    }
+
     return (
       <Modal isOpen={isOpen} onClose={onClose} size="xl">
         <ModalOverlay />
@@ -133,11 +183,19 @@ import {
                 <UserNameInput onNameChange={handleStudentNameChange} currentStudentName={currentStudentName}/>
              
                 <DropzoneUserImage onImageUpload={handleImageUpload}/>
+                <Button
+                  colorScheme="green"
+                  onClick={handleAddStudent}
+                  isDisabled={!currentStudentName}
+                  width="full"
+                >
+                  Adicionar Aluno
+                </Button>
                 {students.length > 0 && (
-                  <VStack spacing={2} align="start" width="full">
-                    <Text fontWeight="bold">Alunos Adicionados:</Text>
+                  <VStack spacing={2} overflow={"scroll"}  colorScheme={"cyan"} height={100} align="start" width="full" >
+                    <Text mb={4}>Alunos Adicionados:</Text>
                     {students.map((student, index) => (
-                      <Flex key={index} direction="row" align="center" gap={4}>
+                      <Flex key={index} direction="row" align="center" gap={4} >
                         {student.image ? (
                           <Image
                             src={student.image}
@@ -150,18 +208,13 @@ import {
                           <Avatar name={student.name} size="sm" />
                         )}
                         <Text>{student.name}</Text>
+                        <RemoveIcon size={16} cursor={"pointer"} onClick={()=>handleRemoveStudent(index)}/>
+                        
                       </Flex>
                     ))}
                   </VStack>
                 )}
-                <Button
-                  colorScheme="green"
-                  onClick={handleAddStudent}
-                  isDisabled={!currentStudentName}
-                  width="full"
-                >
-                  Adicionar Aluno
-                </Button>
+               
                 <Flex width="full" justify="space-between">
                   <Button onClick={handlePrev}>Voltar</Button>
                   <Button
@@ -207,7 +260,7 @@ import {
                   <Button onClick={handlePrev}>Voltar</Button>
                   <Button
                     colorScheme="green"
-                    onClick={onClose}
+                    onClick={()=>handleCreateClass()}
                     isDisabled={!className || students.length === 0}
                   >
                     Confirmar e Criar Turma

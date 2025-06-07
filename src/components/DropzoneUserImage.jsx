@@ -3,9 +3,14 @@ import { useDropzone } from 'react-dropzone';
 import { Upload } from 'lucide-react';
 import { Box, Image, Text, Flex, IconButton } from '@chakra-ui/react';
 import { X as CloseIcon } from 'lucide-react';
+import useStore from "../store/store.js"
+import useCustomToast from '../hooks/useCustomToast.js';
 
 function DropzoneUserImage({ onImageUpload,clearPreview }) {
-  const [preview, setPreview] = useState(null);
+
+  const preview = useStore((state) => state.previewUserImage);
+  const setPreview = useStore((state) => state.setPreviewUserImage);
+  const showToast = useCustomToast();
 
   const onDrop = useCallback(
     (acceptedFiles, rejectedFiles) => {
@@ -20,11 +25,20 @@ function DropzoneUserImage({ onImageUpload,clearPreview }) {
       // Handle rejected files
       rejectedFiles.forEach(({ file, errors }) => {
         if (errors.some((e) => e.code === 'file-too-large')) {
-          alert(`File ${file.name} exceeds 5MB limit.`);
+          showToast({
+            title:`Arquivo ${file.name} excede o limite de 5MB .`,
+            status: 'warning',
+          });
         } else if (errors.some((e) => e.code === 'file-invalid-type')) {
-          alert(`File ${file.name} is not a valid type (.png or .jpg).`);
+          showToast({
+            title: `File ${file.name} não é válido como .png ou .jpg`,
+            status: 'warning',
+          });
         } else if (errors.some((e) => e.code === 'too-many-files')) {
-          alert('Only one file can be uploaded.');
+          showToast({
+            title: 'Selecione somente um arquivo',
+            status: 'warning',
+          });
         }
       });
     },
@@ -60,6 +74,8 @@ function DropzoneUserImage({ onImageUpload,clearPreview }) {
 
   return (
     <Box width="100%" mb={4}>
+      <Text mb="12px" width={"100%"}>Foto do aluno:</Text>
+
       <Box
         {...getRootProps()}
         border="2px dashed"
@@ -81,6 +97,34 @@ function DropzoneUserImage({ onImageUpload,clearPreview }) {
         <Text fontSize="sm" color="gray.500">
           .png, .jpg até 5MB
         </Text>
+        {
+          preview &&
+
+        <Box position="relative" width={100} margin={"auto"}>
+              <Image
+                src={preview}
+                margin={"auto"}
+                marginTop={4}
+                marginBottom={4}
+                alt="Preview"
+                boxSize="80px"
+                objectFit="cover"
+                borderRadius="100%"
+                />
+              <IconButton
+                aria-label="Remover imagem"
+                icon={<CloseIcon />}
+                size="xs"
+                borderRadius={"100%"}
+                position="absolute"
+                top={-1}
+                right={-1}
+                colorScheme="red"
+                onClick={handleRemove}
+                />
+            </Box>
+              }
+      
       </Box>
 
       {/* {preview && (

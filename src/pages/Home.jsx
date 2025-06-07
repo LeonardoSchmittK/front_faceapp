@@ -11,6 +11,7 @@ import ClassesCards from '../components/ClassesCards.jsx';
 import LoadingMessage from '../components/LoadingMessage.jsx';
 import { useFaceModels } from '../hooks/useFaceModels.js';
 import { useNavigate } from 'react-router-dom';
+import useClassrooms from '../hooks/useClassrooms.js';
 
 function Home() {
   const isUserLogged = useStore((state) => state.isUserLogged);
