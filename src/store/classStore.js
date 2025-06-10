@@ -5,23 +5,27 @@ const useClassroomStore = create((set) => ({
   classes: [],
   loadingClasses: false,
   errorClasses: null,
+  initRoll:false,
 
-  fetchClasses: async (teacherId) => {  
+  fetchClasses: async (teacherId) => {
     set({ loadingClasses: true, errorClasses: null });
     try {
-
       const res = await axios.get('http://localhost:3001/api/v1/Classrooms/byTeacher/' + teacherId);
       const data = res.data.data;
 
       set({ classes: data, loadingClasses: false });
-      console.log(data)
+      console.log(data);
     } catch (err) {
-      set({ 
-        errorClasses: err.message || 'Error fetching classrooms', 
-        loadingClasses: false 
+      set({
+        errorClasses: err.message || 'Error fetching classrooms',
+        loadingClasses: false,
       });
     }
   },
+
+  setClasses: (newClasses) => set({ classes: newClasses }),
+  setRoll: (flag) => set({ initRoll: flag  }),
+   resetRoll : () => set({ initRoll: false })
 }));
 
 export default useClassroomStore;

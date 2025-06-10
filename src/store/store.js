@@ -5,6 +5,7 @@ import { devtools } from 'zustand/middleware';
 const useStore = create(
   devtools((set) => ({
     isLoadingModels:false,
+    deadline:null,
     isUserLogged: false,
     teacherLoggedIn:{},
     activeId: false,
@@ -35,6 +36,7 @@ const useStore = create(
       'logout'
     ),
     setActiveId:(id)=>set((state)=>({activeId:id})),
+    setDeadline:(d)=>set((state)=>({deadline:d})),
     updateStudents: (classTitle, newStudents) =>
       set(
         (state) => ({

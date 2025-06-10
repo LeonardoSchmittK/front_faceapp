@@ -1,28 +1,35 @@
-// hooks/useFaceModels.js
 import { useState, useEffect } from 'react';
 import * as faceapi from 'face-api.js';
 
-export function useFaceModels() {
+export function useFaceModels(activeClass, initRoll, triggerLoad) {
   const [modelsLoaded, setModelsLoaded] = useState(false);
   const [labeledDescriptors, setLabeledDescriptors] = useState(null);
   const [loadingError, setLoadingError] = useState(null);
 
   useEffect(() => {
+    if (!triggerLoad) return;
+
+    if (!activeClass || !initRoll) {
+      console.log('No active class or students found');
+      setModelsLoaded(false);
+      setLabeledDescriptors(null);
+      return;
+    }
+
     const loadModels = async () => {
       try {
-        // Preload model weights by setting up the base URI
-        const MODEL_URI = '/models'; // Ensure this is a CDN or optimized local path
-
-        // Load models in parallel with aggressive caching
+        const MODEL_URI = '/models';
+        console.log('Loading face-api.js models from:', MODEL_URI);
         await Promise.all([
           faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URI),
           faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URI),
           faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URI),
           faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URI),
         ]);
+        console.log('Models loaded successfully');
 
-        // Load reference images after models are ready
-        const descriptors = await loadLabeledImages();
+        const descriptors = await loadLabeledImages(activeClass);
+        console.log('Descriptors loaded:', descriptors);
         setLabeledDescriptors(descriptors);
         setModelsLoaded(true);
       } catch (err) {
@@ -32,15 +39,16 @@ export function useFaceModels() {
     };
 
     loadModels();
-  }, []);
 
-  const loadLabeledImages = async () => {
-    const labels = ['Leo'];
+    return () => {};
+  }, [triggerLoad, activeClass, initRoll]);
+
+  const loadLabeledImages = async (students) => {
     try {
-      const descriptorPromises = labels.map(async (label) => {
-        // Preload image to reduce fetch latency
-        const img = await faceapi.fetchImage(`/known/${label.toLowerCase()}.jpg`, {
-          cache: 'force-cache', // Use browser cache if available
+      const descriptorPromises = students.map(async (student) => {
+        console.log(`Fetching image for ${student.name}: ${student.image}`);
+        const img = await faceapi.fetchImage(student.image, {
+          cache: 'force-cache',
         });
 
         const detections = await faceapi
@@ -49,16 +57,18 @@ export function useFaceModels() {
           .withFaceDescriptor();
 
         if (!detections) {
-          throw new Error(`No face detected in image for ${label}`);
+          console.warn(`No face detected in image for ${student.name}`);
+          return null;
         }
 
-        return new faceapi.LabeledFaceDescriptors(label, [detections.descriptor]);
+        return new faceapi.LabeledFaceDescriptors(student.name, [detections.descriptor]);
       });
 
-      return await Promise.all(descriptorPromises);
+      const results = await Promise.all(descriptorPromises);
+      return results.filter((descriptor) => descriptor !== null);
     } catch (err) {
       console.error('Error loading labeled images:', err);
-      throw err; // Propagate error to be caught in loadModels
+      throw err;
     }
   };
 
