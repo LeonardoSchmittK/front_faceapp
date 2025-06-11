@@ -10,7 +10,7 @@ const useClassroomStore = create((set) => ({
   fetchClasses: async (teacherId) => {
     set({ loadingClasses: true, errorClasses: null });
     try {
-      const res = await axios.get('http://localhost:3001/api/v1/Classrooms/byTeacher/' + teacherId);
+      const res = await axios.get('http://ec2-18-231-123-33.sa-east-1.compute.amazonaws.com:3001/api/v1/Classrooms/byTeacher/' + teacherId);
       const data = res.data.data;
 
       set({ classes: data, loadingClasses: false });

@@ -65,7 +65,7 @@ function ClassesCards({ onSelectClass }) {
 
   const handleRemoveClass = async (id) => {
     try {
-      await axios.delete(`http://localhost:3001/api/v1/Classrooms/${id}`);
+      await axios.delete(`http://ec2-18-231-123-33.sa-east-1.compute.amazonaws.com:3001/api/v1/Classrooms/${id}`);
       setClasses(classes.filter((classItem) => classItem._id !== id));
       if (activeId === id) {
         setActiveId(null);
