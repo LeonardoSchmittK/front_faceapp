@@ -15,7 +15,7 @@ function Login() {
       return;
     }
 
-    fetch('http://ec2-18-231-123-33.sa-east-1.compute.amazonaws.com:3001/api/auth/validate-token', {
+    fetch(`https://faceapp.up.railway.app/api/auth/validate-token`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ function Login() {
   const handleLoginSuccess = async (credentialResponse) => {
     const idToken = credentialResponse.credential;
 
-    const res = await fetch('http://ec2-18-231-123-33.sa-east-1.compute.amazonaws.com:3001/api/auth/google', {
+    const res = await fetch(process.env.REACT_APP_PROD_URL_API_BASE + '/api/auth/google', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ idToken }),

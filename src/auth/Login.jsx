@@ -9,7 +9,7 @@ function Login() {
     const idToken = credentialResponse.credential;
     console.log("RESPONSE\n");
     console.log(credentialResponse);
-    const res = await fetch('http://ec2-18-231-123-33.sa-east-1.compute.amazonaws.com:3001/api/auth/google', {
+    const res = await fetch(process.env.REACT_APP_PROD_URL_API_BASE + '/api/auth/google', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ idToken }),
