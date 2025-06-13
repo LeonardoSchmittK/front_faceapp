@@ -18,7 +18,7 @@ export function useFaceModels(activeClass, initRoll, triggerLoad) {
 
     const loadModels = async () => {
       try {
-        const MODEL_URI = '/models';
+        const MODEL_URI = 'https://face-app-s3.s3.sa-east-1.amazonaws.com/models';
         console.log('Loading face-api.js models from:', MODEL_URI);
         await Promise.all([
           faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URI),
