@@ -158,7 +158,7 @@ function CreateClassModal({ isOpen, onClose }) {
       }
     }
     try {
-      const response = await axios.post('http://ec2-18-231-123-33.sa-east-1.compute.amazonaws.com:3001/api/v1/Classrooms/createWithImages', formData, {
+      const response = await axios.post('http://localhost:3001/api/v1/Classrooms/createWithImages', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

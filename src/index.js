@@ -5,7 +5,7 @@ import App from './App';
 import { ChakraProvider } from '@chakra-ui/react';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import theme from './theme/theme';
-
+import "./cssMtj/loginPage.css"
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(

@@ -1,0 +1,38 @@
+#root, #box, #textLogin{
+   
+  position: absolute;
+  top: 500px; /* Distância fixa do topo */
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 80vw; /* Adapta ao tamanho da tela */
+  max-width: 400px; /* Limita o tamanho máximo */
+  height: auto;
+
+  
+
+}
+#box{
+  background-color: white;    /* cor de fundo branca */
+  width: 400px;               /* largura do quadrado */
+  height: 500px;              /* altura do quadrado */
+  border: 2px solid #ddd;     /* borda cinza clara para destacar */
+  box-shadow: 0 0 10px rgba(0,0,0,0.1); /* sombra leve para dar profundidade */
+  border-radius: 8px;         /* cantos arredondados (opcional) */
+  display: flex;              /* para alinhar o conteúdo se quiser */
+  justify-content: center;
+  align-items: center;
+  top:150px;
+}
+#textLogin{
+  color: black;
+  top: 400px;
+  font-family: 'Inter', sans-serif;
+    display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* se quiser centralizar também verticalmente */
+  text-align: center; /* aplica para todo texto */
+  padding: 2rem;
+
+  
+}

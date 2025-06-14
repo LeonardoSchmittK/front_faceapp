@@ -27,7 +27,7 @@ import {
     const fetchRollsHistory = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('http://ec2-18-231-123-33.sa-east-1.compute.amazonaws.com:3001/api/v1/rolls/classroom-teacher', {
+        const response = await axios.get('http://localhost:3001/api/v1/rolls/classroom-teacher', {
           params: {
             classroom: activeClass._id,
             teacher: teacherLoggedIn.id,
