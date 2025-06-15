@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 function Login() {
   const login = useStore((state) => state.login);
   const navigate = useNavigate();
-  const [checkingToken, setCheckingToken] = useState(true); // controle de carregamento
+  const [checkingToken, setCheckingToken] = useState(true);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -29,17 +29,16 @@ function Login() {
       .then(data => {
         if (data.valid) {
           login(data.user);
-          console.log(data.user)
+          console.log(data.user);
           navigate('/Home');
         } else {
-            localStorage.removeItem('token');
-            navigate("/")
+          localStorage.removeItem('token');
+          navigate('/');
         }
       })
       .catch(() => {
         localStorage.removeItem('token');
-        navigate("/")
-
+        navigate('/');
       })
       .finally(() => {
         setCheckingToken(false);
@@ -58,20 +57,39 @@ function Login() {
 
     const data = await res.json();
     login(data.user);
-    console.log(data.user)
     localStorage.setItem('token', data.token);
-    navigate("/Home");
     console.log('Login backend response:', data);
+    navigate('/Home');
   };
 
+  if (checkingToken) return <div>Verificando login...</div>;
 
   return (
-    <>
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '470px',
+        backgroundColor: '#2F2F2F',
+        flexDirection: 'column',
+        borderRadius: '20px'
+
+      }}
+    >
+      <h2 style={{ fontFamily: 'Inter, sans-serif', marginBottom: '20px' }}>
+
+      </h2>
+      <h2 style={{ fontFamily: 'Inter, sans-serif', marginBottom: '20px', textAlign: 'center' }}>
+        Olá! Seja bem-vindo(a) ao FaceApp, para iniciar clique no botão abaixo
+      </h2>
       <GoogleLogin
+        theme="filled_black"
+        size="large"
         onSuccess={handleLoginSuccess}
         onError={() => console.log('Login failed')}
       />
-    </>
+    </div>
   );
 }
 
