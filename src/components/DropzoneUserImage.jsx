@@ -14,11 +14,15 @@ function DropzoneUserImage({ onImageUpload }) {
     (acceptedFiles, rejectedFiles) => {
       if (acceptedFiles.length > 0) {
         const file = acceptedFiles[0];
-        const previewUrl = URL.createObjectURL(file); // Create preview URL
-        setPreview(previewUrl);
-        onImageUpload(file); // Pass the File object directly
-      }
 
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPreview(reader.result); 
+          onImageUpload(file);
+        };
+        reader.readAsDataURL(file);
+      }
+  
       rejectedFiles.forEach(({ file, errors }) => {
         errors.forEach((e) => {
           if (e.code === 'file-too-large') {
@@ -42,6 +46,7 @@ function DropzoneUserImage({ onImageUpload }) {
     },
     [onImageUpload, setPreview, showToast]
   );
+  
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: {

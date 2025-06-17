@@ -85,15 +85,19 @@ function CreateClassModal({ isOpen, onClose }) {
   };
 
   const handleImageUpload = (file) => {
-    // Clean up previous image URL if exists
-    if (currentClassImage?.previewUrl) {
-      URL.revokeObjectURL(currentClassImage.previewUrl);
+    if (!file) {
+      setCurrentClassImage(null);
+      return;
     }
-
-    setCurrentClassImage({
-      file,
-      previewUrl: file ? URL.createObjectURL(file) : null
-    });
+  
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setCurrentClassImage({
+        file,
+        dataUrl: reader.result, // Usamos Data URL
+      });
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleClassNameChange = (name) => {
@@ -105,7 +109,7 @@ function CreateClassModal({ isOpen, onClose }) {
       const newStudent = {
         name: currentStudentName,
         file: currentClassImage.file,
-        previewUrl: currentClassImage.previewUrl,
+        dataUrl: currentClassImage.dataUrl,
       };
       setStudents([newStudent, ...students]);
       setCurrentStudentName('');
@@ -121,10 +125,6 @@ function CreateClassModal({ isOpen, onClose }) {
   };
 
   const handleRemoveStudent = (indexToRemove) => {
-    const studentToRemove = students[indexToRemove];
-    if (studentToRemove.previewUrl) {
-      URL.revokeObjectURL(studentToRemove.previewUrl);
-    }
     setStudents(students.filter((_, index) => index !== indexToRemove));
   };
 
@@ -259,17 +259,17 @@ function CreateClassModal({ isOpen, onClose }) {
                         p={2}
                       >
                         <Flex align="center" gap={3} border="1px solid" borderColor={"gray.600"} padding={2}  borderRadius={4} width={"100%"}>
-                          {student.previewUrl ? (
-                            <Image
-                              src={student.previewUrl}
-                              alt={student.name}
-                              boxSize="40px"
-                              objectFit="cover"
-                              borderRadius="full"
-                            />
-                          ) : (
-                            <Avatar name={student.name} size="sm" />
-                          )}
+                        {student.dataUrl ? (
+                          <Image
+                            src={student.dataUrl}
+                            alt={student.name}
+                            boxSize="40px"
+                            objectFit="cover"
+                            borderRadius="full"
+                          />
+                        ) : (
+                          <Avatar name={student.name} size="sm" />
+                        )}
                           <Text flex={1}>{student.name}</Text>
                           <IconButton
                             aria-label="Remover aluno da lista"
@@ -322,9 +322,9 @@ function CreateClassModal({ isOpen, onClose }) {
                 <Box maxH="300px" overflowY="auto" mt={2}>
                   {students.map((student, index) => (
                     <Flex key={index} align="center" gap={3} p={2}>
-                      {student.previewUrl ? (
+                      {student.dataUrl ? (
                         <Image
-                          src={student.previewUrl}
+                          src={student.dataUrl}
                           alt={student.name}
                           boxSize="50px"
                           objectFit="cover"
