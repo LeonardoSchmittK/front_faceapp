@@ -7,7 +7,6 @@ import {
   ModalContent,
   ModalHeader,
   ModalCloseButton,
-  ModalBody,
   ModalFooter,
   Text,
   Spinner,
@@ -31,14 +30,12 @@ function ModalWebcam({ isOpen, onClose }) {
   const [prevMatchedStudent, setPrevMatchedStudent] = useState(null);
   const [recognizedStudents, setRecognizedStudents] = useState(new Set());
   const [stream, setStream] = useState(null);
-  const [detectionInterval, setDetectionInterval] = useState(null);
+  const [setDetectionInterval] = useState(null);
   const [triggerLoad, setTriggerLoad] = useState(false);
   const [timeLeft, setTimeLeft] = useState('');
   const deadline = useStore((state) => state.deadline)
   const teacherLoggedIn = useStore((state) => state.teacherLoggedIn)
   const setRoll = useClassroomStore((state) => state.setRoll)
-  const setActiveClass = useClassRollstore((state) => state.setActiveClass)
-  const setActiveId = useStore((state) => state.setActiveId)
   const setDeadline = useStore((state) => state.setDeadline)
   
   const activeClass = useClassRollstore((state) => state.activeClass?.students);
@@ -76,7 +73,7 @@ function ModalWebcam({ isOpen, onClose }) {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [deadline, onClose]);
+  });
 
   useEffect(() => {
     if (isOpen && modelsLoaded && !loadingError) {
@@ -99,7 +96,7 @@ function ModalWebcam({ isOpen, onClose }) {
         setRecognizedStudents(new Set());
       };
     }
-  }, [isOpen, modelsLoaded, loadingError, labeledDescriptors]);
+  });
 
   const startVideo = () => {
     navigator.mediaDevices.getUserMedia({ video: true })
@@ -234,7 +231,7 @@ function ModalWebcam({ isOpen, onClose }) {
       }
       onClose();
     }
-  }, [matchedStudent, prevMatchedStudent, recognizedStudents, activeClass, showToast, isCompleted, onClose]);
+  }, [matchedStudent, prevMatchedStudent.name, recognizedStudents, activeClass, showToast, isCompleted, onClose, setRoll, activeClassAllObj._id, teacherLoggedIn.id]);
 
   return (
     <Modal 

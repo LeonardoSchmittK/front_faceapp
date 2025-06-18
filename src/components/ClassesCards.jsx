@@ -2,7 +2,6 @@ import {
   Flex,
   Heading,
   useColorModeValue,
-  Tooltip,
   IconButton,
   Menu,
   MenuButton,

@@ -37,7 +37,7 @@ function LoadingMessage() {
     }, 2000);
 
     return () => clearInterval(interval);
-  }, []); 
+  }); 
 
   return (
     <Heading size="md" as="h5">

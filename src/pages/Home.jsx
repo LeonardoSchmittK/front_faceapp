@@ -1,37 +1,31 @@
 import {
-  Button, Flex, useColorMode, Center, Tooltip, VStack, Text, IconButton, HStack,
-  useDisclosure, Spinner, Modal, ModalOverlay, ModalContent, ModalHeader,
-  ModalBody, ModalFooter, Input, FormControl, FormLabel
+  Button, Flex, useColorMode, Center, Tooltip, Text, IconButton, HStack,
+  useDisclosure, Spinner,
 } from '@chakra-ui/react';
 import ModalWebcam from '../components/ModalWebcam.jsx';
 import CreateClassModal from '../components/CreateClassModal.jsx';
 import { ArrowLeftToLine, Sun, Moon } from 'lucide-react';
 import useStore from '../store/store.js';
-import { act, useEffect, useState } from 'react';
+import { useState } from 'react';
 import ClassesCards from '../components/ClassesCards.jsx';
 import LoadingMessage from '../components/LoadingMessage.jsx';
-import { useFaceModels } from '../hooks/useFaceModels.js';
 import { useNavigate } from 'react-router-dom';
-import useClassrooms from '../hooks/useClassrooms.js';
 import CallRollModal from '../components/CallRollModal.jsx';
 import useClassRollstore from '../store/rollStore.js'; 
-import RollsHistory from "../components/RollsHistory.jsx"
 
 function Home() {
+
   const isUserLogged = useStore((state) => state.isUserLogged);
   const teacherLoggedIn = useStore((state) => state.teacherLoggedIn);
   const logout = useStore((state) => state.logout);
   const activeId = useStore((state) => state.activeId);
-  const isLoadingModels = useStore((state) => state.isLoadingModels);
   const { colorMode, toggleColorMode } = useColorMode();
   const navigate = useNavigate();
   const [selectedClass, setSelectedClass] = useState(null);
   const setActiveClass = useClassRollstore((state) => state.setActiveClass);
-  const activeClass = useClassRollstore((state) => state.activeClass);
   const webcamModal = useDisclosure();
   const createClassModal = useDisclosure();
-  const callRollModal = useDisclosure(); 
-  const rollsHistory = useDisclosure() 
+  const callRollModal = useDisclosure();
 
   function handleInitSession() {
     if (activeId && selectedClass) {

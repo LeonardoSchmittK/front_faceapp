@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Upload, X as CloseIcon } from 'lucide-react';
 import { Box, Image, Text, IconButton } from '@chakra-ui/react';

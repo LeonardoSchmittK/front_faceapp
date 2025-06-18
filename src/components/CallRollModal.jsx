@@ -1,5 +1,5 @@
 import {
-  Button, Flex, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter,
+  Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter,
   VStack, Text, FormControl, FormLabel, Input
 } from '@chakra-ui/react';
 import useClassRollstore from '../store/rollStore.js';
@@ -43,7 +43,7 @@ function CallRollModal({ isOpen, onClose, onNext }) {
 
   useEffect(()=>{
     setDeadline(null)
-  },[])
+  },[setDeadline])
 
   const handleNext = () => {
     const now = new Date();

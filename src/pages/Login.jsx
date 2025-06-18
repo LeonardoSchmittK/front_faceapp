@@ -64,6 +64,9 @@ function Login() {
     console.log('Login backend response:', data);
   };
 
+  if (checkingToken) {
+    return <p>Verificando login...</p>;
+  }
 
   return (
     <>

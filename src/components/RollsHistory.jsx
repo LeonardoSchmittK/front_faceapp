@@ -5,12 +5,11 @@ import {
   } from '@chakra-ui/react';
   import useClassRollstore from '../store/rollStore.js';
   import useStore from '../store/store.js';
-  import useClassroomStore from '../store/classStore.js';
   import { useEffect, useState } from 'react';
   import axios from 'axios';
   import { CircleCheckBig  } from 'lucide-react';
   
-  function RollsHistory({ isOpen, onClose, onNext }) {
+  function RollsHistory({ isOpen, onClose }) {
     const [rollsHistory, setRollsHistory] = useState([]);
     const [loading, setLoading] = useState(false);
     const toast = useToast();
@@ -22,7 +21,7 @@ import {
       if (isOpen && activeClass && teacherLoggedIn) {
         fetchRollsHistory();
       }
-    }, [isOpen, activeClass, teacherLoggedIn]);
+    });
   
     const fetchRollsHistory = async () => {
       try {
@@ -93,7 +92,7 @@ import {
                                 <Text>{studentEntry.student.name}</Text>
                                 </HStack>
                                 <HStack spacing={1} align="center">
-                                <Text>Status: {studentEntry.status == "present" ? "presente" : ""}</Text>
+                                <Text>Status: {studentEntry.status === "present" ? "presente" : ""}</Text>
                                 <CircleCheckBig size={18} color='green'/>
                                 </HStack>
                             </Flex>

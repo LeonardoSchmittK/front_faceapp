@@ -45,7 +45,6 @@ const steps = [
 
 function CreateClassModal({ isOpen, onClose }) {
   const setPreviewImage = useStore((state) => state.setPreviewUserImage);
-  const previewImage = useStore((state) => state.previewUserImage);
   const teacherLoggedIn = useStore((state) => state.teacherLoggedIn);
   const fetchClasses = useClassroomStore((state) => state.fetchClasses);
   const showToast = useCustomToast();
@@ -158,7 +157,7 @@ function CreateClassModal({ isOpen, onClose }) {
       }
     }
     try {
-      const response = await axios.post(process.env.REACT_APP_PROD_URL_API_BASE + '/api/v1/Classrooms/createWithImages', formData, {
+      await axios.post(process.env.REACT_APP_PROD_URL_API_BASE + '/api/v1/Classrooms/createWithImages', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
