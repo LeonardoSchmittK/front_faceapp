@@ -30,7 +30,7 @@ function ModalWebcam({ isOpen, onClose }) {
   const [prevMatchedStudent, setPrevMatchedStudent] = useState(null);
   const [recognizedStudents, setRecognizedStudents] = useState(new Set());
   const [stream, setStream] = useState(null);
-  const [setDetectionInterval] = useState(null);
+  const detectionInterval = useRef(null);
   const [triggerLoad, setTriggerLoad] = useState(false);
   const [timeLeft, setTimeLeft] = useState('');
   const deadline = useStore((state) => state.deadline)
@@ -73,30 +73,30 @@ function ModalWebcam({ isOpen, onClose }) {
     }, 1000);
 
     return () => clearInterval(interval);
-  });
+  }, [deadline, onClose, setDeadline]);
 
   useEffect(() => {
     if (isOpen && modelsLoaded && !loadingError) {
       startVideo();
-      const interval = faceMyDetect();
-      setDetectionInterval(interval);
+      detectionInterval.current = faceMyDetect();
   
       return () => {
-        if (interval) clearInterval(interval);
+        if (detectionInterval.current) clearInterval(detectionInterval.current);
         if (stream) {
           stream.getTracks().forEach((track) => {
             track.stop(); 
           });
         }
         setStream(null); 
-        setDetectionInterval(null); 
         setMatchedStudent(null); 
         setCompleted(false);
         setPrevMatchedStudent(null); 
         setRecognizedStudents(new Set());
       };
     }
-  });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, modelsLoaded, loadingError, labeledDescriptors]);
+
 
   const startVideo = () => {
     navigator.mediaDevices.getUserMedia({ video: true })
@@ -231,7 +231,7 @@ function ModalWebcam({ isOpen, onClose }) {
       }
       onClose();
     }
-  }, [matchedStudent, prevMatchedStudent.name, recognizedStudents, activeClass, showToast, isCompleted, onClose, setRoll, activeClassAllObj._id, teacherLoggedIn.id]);
+  }, [matchedStudent, prevMatchedStudent, recognizedStudents, activeClass, showToast, isCompleted, onClose, setRoll, activeClassAllObj, teacherLoggedIn]);
 
   return (
     <Modal 
