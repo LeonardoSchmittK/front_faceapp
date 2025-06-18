@@ -1,5 +1,4 @@
 #root,
-#box,
 #textLogin {
 
   position: absolute;
@@ -21,7 +20,7 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 2rem;
+ 
 }
 
 #root {
